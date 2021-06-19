@@ -1,14 +1,26 @@
+# vscode file
+.vscode
+**/.vscode
+
+# Java Configuration Files
+.classpath
+.project
+.settings
+**/.classpath
+**/.project
+**/.settings
+
+# Build files
+target
+
 # Compiled class file
 *.class
 
+# Maven build locations
+**/target
+
 # Log file
 *.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
 # Package Files #
 *.jar
