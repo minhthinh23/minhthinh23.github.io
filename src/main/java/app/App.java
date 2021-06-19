@@ -31,7 +31,7 @@ public class App {
             config.addStaticFiles("DataTables/");
             config.addStaticFiles("jquery-ui/");
             config.addStaticFiles("js/");
-            config.addStaticFiles("node_modules/");
+            //config.addStaticFiles("node_modules/");
         }).start(JAVALIN_PORT);
 
 

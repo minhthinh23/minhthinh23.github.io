@@ -51,17 +51,19 @@ public class Reports implements Handler {
             "<input type='submit' value='Go' class='submit'>" +
         "</form>";
 
-        html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Cases</h1> <p class='text-gray-500 text-sm'>30,000</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Deaths</h1> <p class='text-gray-500 text-sm'>30,000</p></div></div></div><div class='data-tables px-3' data-check='modal'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Country</th> <th id='data-death'>Deaths</th> <th id='data-recovery'>Recoveries</th> <th id='data-fatalityRate'>Fatality Rate</th> <th id='data-infectionsToDeathPerCapita'>Infections to death per Capita</th> </tr></thead> <tbody>";
+        html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Cases</h1> <p class='text-gray-500 text-sm'>30,000</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Deaths</h1> <p class='text-gray-500 text-sm'>30,000</p></div></div></div><div class='data-tables px-3' data-check='modal'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Country</th> <th id='data-death'>Infections</th> <th id='data-recovery'>Deaths</th> <th id='data-fatalityRate'>Average Infection Rate</th> <th id='data-infectionsToDeathPerCapita'>Fatality Rate</th> </tr></thead> <tbody>";
 
         // Run loop here to fill the table with all data
-        html = html +
-        "<tr data-country='countryName1'>" +
-            "<td>System Architect</td>" +
-            "<td>Edinburgh</td>" +
-            "<td>61</td>" +
-            "<td>2011/04/25</td>" +
-            "<td>$320,800</td>" +
-       "</tr>";
+ 
+       for(int i = 1; i < 191; i++){
+        html = html + "<tr data-country='countryName1'>";
+        ArrayList<String> countryData = jdbc.printCountryReportData(i);
+
+        for(int j = 0; j < 5; j++){
+            html = html + "<td>" + countryData.get(j) + "</td>";
+        }
+        html = html + "</tr>";
+    }
         // End loop
 
         html = html + " </tbody> </table> </div></div></div><div class='country bg-black bg-opacity-20 flex justify-center hidden' id='countryModal'> <div class='data self-center px-3 py-2 relative' id='countryModalData'>";
