@@ -1,0 +1,271 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+.cover .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 100vh !important;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 0rem;
+  max-width: 80%;
+  background-color: #2f49d0;
+}
+.cover .sidebar .top {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.534);
+  position: relative;
+}
+.cover .sidebar .top .logo img {
+  width: 4rem;
+  height: 4rem;
+}
+.cover .sidebar .top input#search {
+  margin-top: 2rem;
+  width: 95%;
+  margin-left: 2.5%;
+  height: 2rem;
+  border-radius: 0.3rem;
+  background-color: #576CD8;
+  border: 1px solid #576CD8;
+  box-sizing: border-box;
+  padding: 0.3rem 0.5rem;
+  outline: none;
+  box-shadow: none;
+}
+.cover .sidebar .top input#search::-moz-placeholder {
+  color: #ffffff;
+  opacity: 0.8;
+}
+.cover .sidebar .top input#search:-ms-input-placeholder {
+  color: #ffffff;
+  opacity: 0.8;
+}
+.cover .sidebar .top input#search::placeholder {
+  color: #ffffff;
+  opacity: 0.8;
+}
+.cover .sidebar .top input#search:focus {
+  background-color: #ffffff;
+  border: 1px solid #2F49D0;
+}
+.cover .sidebar .top input#search:focus::-moz-placeholder {
+  color: #979797;
+  opacity: 1;
+}
+.cover .sidebar .top input#search:focus:-ms-input-placeholder {
+  color: #979797;
+  opacity: 1;
+}
+.cover .sidebar .top input#search:focus::placeholder {
+  color: #979797;
+  opacity: 1;
+}
+.cover .sidebar .bottom .item:hover {
+  background-color: #1A2B82;
+}
+.cover nav {
+  display: flex;
+  align-items: center;
+}
+.cover nav .patch {
+  position: relative;
+}
+.cover nav .patch input#nav_control {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 2px;
+  left: 0px;
+  -webkit-appearance: none;
+}
+
+.selected {
+  background-color: #1a2b82;
+}
+
+/* class applies to select element itself, not a wrapper element */
+.select {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #444;
+  line-height: 1;
+  padding: 0.3rem 0.7rem;
+  box-sizing: border-box;
+  margin: 0.5rem;
+  border: 1px solid #aaa;
+  border-radius: 5rem;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0);
+  /* note: bg image below uses 2 urls. The first is an svg data uri for the arrow icon, and the second is the gradient. 
+    for the icon, if you want to change the color, be sure to use `%23` instead of `#`, since it's a url. You can also swap in a different svg icon or an external image reference
+
+  */
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMCA3LjMzbDIuODI5LTIuODMgOS4xNzUgOS4zMzkgOS4xNjctOS4zMzkgMi44MjkgMi44My0xMS45OTYgMTIuMTd6Ii8+PC9zdmc+"), linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
+  background-repeat: no-repeat, repeat;
+  /* arrow icon position (1em from the right, 50% vertical) , then gradient position*/
+  background-position: right 0.7em top 50%, 0 0;
+  /* icon size, then gradient */
+  background-size: 0.7em auto, 100%;
+}
+
+/* Hide arrow icon in IE browsers */
+.select::-ms-expand {
+  display: none;
+}
+
+/* Hover style */
+.select:hover {
+  border-color: #888;
+}
+
+/* Focus style */
+.select:focus {
+  border-color: #aaa;
+  /* It'd be nice to use -webkit-focus-ring-color here but it doesn't work on box-shadow */
+  color: #222;
+  outline: none;
+}
+
+/* Set options to normal weight */
+.select option {
+  font-weight: normal;
+}
+
+/* Support for rtl text, explicit support for Arabic and Hebrew */
+*[dir=rtl] .select, :root:lang(ar) .select, :root:lang(iw) .select {
+  background-position: left 0.7em top 50%, 0 0;
+  padding: 0.6em 0.8em 0.5em 1.4em;
+}
+
+/* Disabled styles */
+.select:disabled, .select[aria-disabled=true] {
+  color: graytext;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22graytext%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"), linear-gradient(to bottom, #ffffff 0%, #e5e5e5 100%);
+}
+
+.select:disabled:hover, .select[aria-disabled=true] {
+  border-color: #aaa;
+}
+
+.inp {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #444;
+  line-height: 1;
+  padding: 0.3rem 0.7rem;
+  box-sizing: border-box;
+  border-radius: 5rem;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0);
+  width: 95px !important;
+}
+
+.inp:focus {
+  border-color: #aaa;
+  /* It'd be nice to use -webkit-focus-ring-color here but it doesn't work on box-shadow */
+  color: #222;
+  outline: none;
+}
+
+.time-period {
+  margin: 0.5rem;
+  border: 1px solid #aaa;
+  border-radius: 5rem;
+}
+.time-period p {
+  font-size: 0.9rem !important;
+}
+
+table#data-tables th {
+  text-align: left !important;
+}
+table#data-tables th:nth-child(2) {
+  text-align: center !important;
+}
+table#data-tables th:nth-child(3) {
+  text-align: right !important;
+}
+table#data-tables tr, table#data-tables tr.even td.sorting_1, table#data-tables tr.odd td.sorting_1 {
+  background-color: #ffffff;
+  cursor: pointer;
+}
+table#data-tables tr td:nth-child(2), table#data-tables tr.even td.sorting_1 td:nth-child(2), table#data-tables tr.odd td.sorting_1 td:nth-child(2) {
+  text-align: center !important;
+}
+table#data-tables tr td:nth-child(3), table#data-tables tr.even td.sorting_1 td:nth-child(3), table#data-tables tr.odd td.sorting_1 td:nth-child(3) {
+  text-align: right !important;
+}
+
+.submit {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1;
+  padding: 0.3rem 0.7rem;
+  box-sizing: border-box;
+  border-radius: 5rem;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #2f49d0;
+  margin: auto 0px;
+  height: 26px !important;
+  cursor: pointer;
+}
+
+.country {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.country .data {
+  width: 60rem;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  background-color: #ffffff;
+}
+.country .data .base {
+  width: 20rem;
+}
+.country .data .chart #canvas {
+  width: 38rem;
+}
+
+.left {
+  width: 60% !important;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+}
+
+.right {
+  width: 40% !important;
+}
+.right .top {
+  width: 100%;
+  height: 450px;
+}
+.right .top img, .right .top svg {
+  width: 100%;
+  height: 100% !important;
+  margin: auto;
+}
+.right .top-chart {
+  height: 300px;
+}

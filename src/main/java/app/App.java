@@ -17,7 +17,6 @@ public class App {
 
     public static final int         JAVALIN_PORT    = 7000;
     public static final String      CSS_DIR         = "css/";
-    public static final String      IMAGES_DIR      = "images/";
 
     public static void main(String[] args) {
         // Create our HTTP server and listen in port 7000
@@ -27,8 +26,12 @@ public class App {
             // Uncomment this if you have files in the CSS Directory
             config.addStaticFiles(CSS_DIR);
 
-            // Uncomment this if you have files in the Images Directory
-            config.addStaticFiles(IMAGES_DIR);
+            // Other Files
+            config.addStaticFiles("assets/");
+            config.addStaticFiles("DataTables/");
+            config.addStaticFiles("jquery-ui/");
+            config.addStaticFiles("js/");
+            config.addStaticFiles("node_modules/");
         }).start(JAVALIN_PORT);
 
 
@@ -37,7 +40,7 @@ public class App {
     }
 
     public static void configureRoutes(Javalin app) {
-        // ADD ALL OF YOUR WEBPAGES HERE
+        // ADD ALL OF YOUR WEBPAGES HERE (GET)
         app.get(Index.URL, new Index());
         app.get(Infections.URL, new Infections());
         app.get(Deaths.URL, new Deaths());
@@ -45,6 +48,7 @@ public class App {
         app.get(Overview.URL, new Overview());
         app.get(Compare.URL, new Compare());
         
+        // Fetch Data (POST)
         app.post(Infections.URL, new Infections());
         app.post(Compare.URL, new Compare());
     }
