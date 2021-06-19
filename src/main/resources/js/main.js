@@ -1,5 +1,10 @@
 $(document).ready(function () {
   $("#nav_control").click(function () {
+    navControll();
+  });
+
+
+  function navControll(){
     if ($("#nav_control").is(':checked') && $(".sidebar").css("opacity") == 0) {
       $(".sidebar").removeClass('hidden');
       setTimeout(function () {
@@ -14,7 +19,7 @@ $(document).ready(function () {
       }, 500);
       $(".container").animate({
         // paddingLeft: "+=0rem"
-        marginLeft: "+=20rem"
+        marginLeft: "20rem"
       }, 500);
     } else {
       $(".sidebar").addClass('hidden');
@@ -27,13 +32,13 @@ $(document).ready(function () {
       }, 500);
       $(".container").animate({
         // paddingLeft: "-=0rem"
-        marginLeft: "-=20rem"
+        marginLeft: "0rem"
       }, 500);
     }
-  });
+  }
 
 
-  $("#date_begin").datepicker({
+  $("[name='date_begin']").datepicker({
     dateFormat: "dd/mm/yy",
     // autoSize: true,
     hideIfNoPrevNext: true,
@@ -46,7 +51,7 @@ $(document).ready(function () {
     }
   });
 
-  $("#date_end").datepicker({
+  $("[name='date_end']").datepicker({
     dateFormat: "dd/mm/yy",
     // autoSize: true,
     hideIfNoPrevNext: true,
@@ -153,4 +158,6 @@ $(document).ready(function () {
       // out
     }
   );
+
+  navControll();
 });
