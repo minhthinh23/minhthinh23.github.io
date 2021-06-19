@@ -44,6 +44,9 @@ public class App {
         app.get(Reports.URL, new Reports());
         app.get(Overview.URL, new Overview());
         app.get(Compare.URL, new Compare());
+        
+        app.post(Infections.URL, new Infections());
+        app.post(Compare.URL, new Compare());
     }
 
 }

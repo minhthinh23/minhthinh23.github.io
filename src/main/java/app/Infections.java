@@ -21,45 +21,133 @@ public class Infections implements Handler {
 
     @Override
     public void handle(Context context) throws Exception {
-        // Create a simple HTML webpage in a String
+
         String html = "<html>";
 
-        // Add some Header information
-        html = html + "<head>" + 
-               "<title>Movies</title>";
 
-        // Add some CSS (external file)
+        html = html + "<head>" + 
+               "<title>Infections By Country:</title>";
+
+
         html = html + "<link rel='stylesheet' type='text/css' href='common.css' />";
 
-        // Add the body
+
         html = html + "<body>";
 
-        // Look up some information from JDBC
-        // First we need to use your JDBCConnection class
+
+        html = html + "<div class='world'>";
+        html = html + "<h1>Cases Per Country</h1>";
+        html = html + "<h2>Apply filters here:</h2>";
+
+        html = html + "<form action='/infectionsbycountry.html' method='post'>";
+
+                html = html + "   <div class='form-group'>";
+                    html = html + "      <label for='entrydate_textbox'>First Date (dd/mm/yy)</label>";
+                    html = html + "      <input class='form-control' id='entrydate_textbox' name='entrydate_textbox'>";
+                html = html + "      <label for='exitdate_textbox'>Last Date (dd/mm/yy)</label>";
+                html = html + "      <input class='form-control' id='exitdate_textbox' name='exitdate_textbox'>";
+            html = html + "   </div>";
+            html = html + "   <button type='submit' class='btn btn-primary'>Submit</button>";
+        html = html + "</form>";
+
+
+        String entrydate_textbox = context.formParam("entrydate_textbox");
+        String exitdate_textbox = context.formParam("exitdate_textbox");
+
+
+        html = html + "<div id ='d1'>";
+        if (entrydate_textbox == null || entrydate_textbox == "") {
+            html = html + "<p><i>Displaying info for 20/01/2020 until 21/04/2020</i></p>"; 
+            html = html + "<div class='container'>"; 
+            html = html + "<table class = 'infectionstable sticky'><thead><tr><th>Country:</th> <th>Longitude:</th><th>Latitude:</th> <th>Population:</th> <th>Total Cases:</th> <th>Most Cases in a Day:</th>";
+            html = html + "</tr></thead><tbody>";
+        }
+        else {
+            html = html + "<p><i>Displaying info for " + entrydate_textbox + " until " + exitdate_textbox + "</i></p>";
+            html = html + "<div class='container'>";
+            html = html + "<table class = 'infectionstable sticky'><thead><tr><th>Country:</th> <th>Longitude:</th><th>Latitude:</th> <th>Population:</th> <th>Total Cases:</th> <th>Most Cases in a Day:</th>";
+            html = html + "</tr></thead><tbody>";
+        }
+
+
+        
+
+        if (entrydate_textbox == null || entrydate_textbox == "") {
+            for(int i = 1; i < 191; i++){
+                html = html + "<tr>";
+                JDBCConnection jdbc = new JDBCConnection();
+                ArrayList<String> countryData = jdbc.printCountryData(i);
+                html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
+    
+                for(int j = 0; j < 5; j++){
+                    html = html + "<td>" + countryData.get(j) + "</td>";
+                }
+            }
+        }         
+        else {
+            for(int i = 1; i < 191; i++){
+                html = html + "<tr>";
+                JDBCConnection jdbc = new JDBCConnection();
+                ArrayList<String> countryData = jdbc.printCountryDataWithRange(i, entrydate_textbox, exitdate_textbox);
+                html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
+    
+                for(int j = 0; j < 5; j++){
+                    html = html + "<td>" + countryData.get(j) + "</td>";
+                }
+
+            }
+        }
+
+        html = html + "</tbody></table>";
+        html = html + "</div>";
+        html = html + "</div>";
+
+
+
+
+
+    html = html + "<div class='australia'>";
+
+        html = html + "<h2>Australia</h2>";
+        html = html + "<form action='/infectionsbycountry.html' method='post'>";
+        html = html + "      <label for='australia_drop'>Select the range:</label>";
+        html = html + "      <select id='australia_drop' name='australia_drop'>";
+            html = html + "<option selected>Per Capita</option>";
+            html = html + "<option>Total</option>";
+        html = html + "      </select>";
+
+        html = html + "   <button type='submit' class='btn btn-primary'>Submit</button>";
+        html = html + "</form>";
+
+        html = html + "<table class='infectionstable'><thead><tr><th>States:</th> <th>Cases:</th><th>Recovered:</th></tr></thead><tbody>";
         JDBCConnection jdbc = new JDBCConnection();
+        html = html + jdbc.outputAustralianStateInfo("Victoria");
+        html = html + jdbc.outputAustralianStateInfo("Queensland");
+        html = html + jdbc.outputAustralianStateInfo("Tasmania");
+        html = html + jdbc.outputAustralianStateInfo("New South Wales");
+        html = html + jdbc.outputAustralianStateInfo("Western Australia");
+        html = html + jdbc.outputAustralianStateInfo("Northern Territory");
+        html = html + jdbc.outputAustralianStateInfo("Australian Capital Territory");
+        html = html + jdbc.outputAustralianStateInfo("South Australia");
+        html = html + "</tbody></table>";
+        html = html + "</div>";
+  
 
-        // Next we will ask this *class* for the movies
-        // ArrayList<String> movies = jdbc.getMovies();
+        html = html + "<div class='retu'>";
+        html = html + "<p>Return to Homepage: ";
+        html = html + "<a href='/'>Link to Homepage</a>";
+        html = html + "</p>";
+        html = html + "</div>";
 
-        // Add HTML for the movies list
-        html = html + "<h1>Movies</h1>" + "<ul>";
 
-        // Finally we can print out all of the movies
-        // for (String movie : movies) {
-        //     html = html + "<li>" + movie + "</li>";
-        // }
+
 
         // Finish the List HTML
         html = html + "</ul>";
 
-        // Add HTML for link back to the homepage
-        html = html + "<p>Return to Homepage: ";
-        html = html + "<a href='/'>Link to Homepage</a>";
-        html = html + "</p>";
-
         // Finish the HTML webpage
         html = html + "</body>" + "</html>";
-        
+
 
         // DO NOT MODIFY THIS
         // Makes Javalin render the webpage

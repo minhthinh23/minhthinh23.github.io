@@ -34,32 +34,33 @@ public class Deaths implements Handler {
         // Add the body
         html = html + "<body>";
 
+        // Add HTML for link back to the homepage
+        html = html + "<h1>Page 4</h1>";
+        html = html + "<p>Return to Homepage: ";
+        html = html + "<a href='/'>Link to Homepage</a>";
+        html = html + "</p>";
+
         // Look up some information from JDBC
         // First we need to use your JDBCConnection class
         JDBCConnection jdbc = new JDBCConnection();
 
         // Next we will ask this *class* for the movies
-        // ArrayList<String> movies = jdbc.getMovies();
+        ArrayList<String> movies = jdbc.getMovies();
 
         // Add HTML for the movies list
         html = html + "<h1>Movies</h1>" + "<ul>";
 
         // Finally we can print out all of the movies
-        // for (String movie : movies) {
-        //     html = html + "<li>" + movie + "</li>";
-        // }
+        for (String movie : movies) {
+            html = html + "<li>" + movie + "</li>";
+        }
 
         // Finish the List HTML
         html = html + "</ul>";
 
-        // Add HTML for link back to the homepage
-        html = html + "<p>Return to Homepage: ";
-        html = html + "<a href='/'>Link to Homepage</a>";
-        html = html + "</p>";
-
         // Finish the HTML webpage
         html = html + "</body>" + "</html>";
-        
+
 
         // DO NOT MODIFY THIS
         // Makes Javalin render the webpage

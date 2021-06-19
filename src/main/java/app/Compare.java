@@ -34,32 +34,42 @@ public class Compare implements Handler {
         // Add the body
         html = html + "<body>";
 
-        // Look up some information from JDBC
-        // First we need to use your JDBCConnection class
-        JDBCConnection jdbc = new JDBCConnection();
-
-        // Next we will ask this *class* for the movies
-        // ArrayList<String> movies = jdbc.getMovies();
-
-        // Add HTML for the movies list
-        html = html + "<h1>Movies</h1>" + "<ul>";
-
-        // Finally we can print out all of the movies
-        // for (String movie : movies) {
-        //     html = html + "<li>" + movie + "</li>";
-        // }
-
-        // Finish the List HTML
-        html = html + "</ul>";
-
         // Add HTML for link back to the homepage
+        html = html + "<h1>Comparing Countries:</h1>";
+        html = html + "<h2>Select the Country or State you would like to compare.</h2>";
+        //MAKE BUTTON WHICH DISPLAYS LIST OF COUNTRIES
+        
+        JDBCConnection jdbc = new JDBCConnection();
+        ArrayList<String> category = jdbc.getCountryList();
+        html = html + "<form action='/comparecountries.html' method='post'>";
+        html = html + "   <div class='form-group'>";
+        html = html + "      <label for='countryname_drop'>Select the type Movie Type (Dropdown):</label>";
+        html = html + "      <select id='countryname_drop' name='countryname_drop'>";
+        for (String categories : category) {
+            html = html + "<option>" + categories + "</option>";
+        }
+        html = html + "      </select>";
+        html = html + "   </div>";
+        html = html + "   <button type='submit' class='btn btn-primary'>Submit</button>";
+        html = html + "</form>";
+
+
+        String countryname_drop = context.formParam("countryname_drop");
+        if (countryname_drop == null) {
+            // If NULL, nothing to show, therefore we make some "no results" HTML
+            html = html + "<h2><i>No Results to show for dropbox</i></h2>";
+        } else {
+            // If NOT NULL, then lookup the movie by type!
+            html = html + jdbc.outputCountryDataString(countryname_drop);
+        }
         html = html + "<p>Return to Homepage: ";
         html = html + "<a href='/'>Link to Homepage</a>";
         html = html + "</p>";
 
+ 
         // Finish the HTML webpage
         html = html + "</body>" + "</html>";
-        
+
 
         // DO NOT MODIFY THIS
         // Makes Javalin render the webpage
