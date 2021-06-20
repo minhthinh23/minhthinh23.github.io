@@ -45,15 +45,10 @@ public class Infections implements Handler {
             "<input type='submit' value='Go' class='submit'>" +
         "</form>";
 
-        html = html + "</div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Cases</h1> <p class='text-gray-500 text-sm'>" + cases + "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Deaths</h1> <p class='text-gray-500 text-sm'>" + deaths + "</p></div></div><div class='data-tables px-3' data-check='side'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Country</th> <th id='data-death'>Cases</th> <th id='data-recovery'>Recoveries</th> </tr></thead> <tbody>";
+        html = html + "</div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Cases</h1> <p class='text-gray-500 text-sm'>" + cases + "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Deaths</h1> <p class='text-gray-500 text-sm'>" + deaths + "</p></div></div><div class='data-tables px-3' data-check='side'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Country</th> <th id='data-death'>Longitude</th> <th id='data-recovery'>Latitude</th><th>Population</th> <th>Cases</th> <th>Most Cases in a Day</th></tr></thead> <tbody>";
 
         // Loop through to fill table content (Check figme to know what data to fill | Check column headers)
-        html = html + 
-        "<tr data-country='none'>" +
-            "<td>Edinburgh</td>" +
-            "<td>61</td>" +
-            "<td>2011/04/25</td>" +
-        "</tr>";
+
         for(int i = 1; i < 191; i++){
             html = html + "<tr data-country='none'>";
 
@@ -99,7 +94,7 @@ public class Infections implements Handler {
             "</div>" +
         "</div>" +
         
-        " <div class='data-tables px-3' data-check='side'> <table id='data-table-country' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>States</th> <th id='data-death'>Cases</th> <th id='data-recovery'>Recoveries</th> </tr></thead> <tbody>";
+        " <div class='data-tables px-3' data-check='side'> <table id='data-table-country' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>States</th> <th id='data-death'>Cases</th> <th id='data-recovery'>Deaths</th> </tr></thead> <tbody>";
 
         // Table rows | Use Loopto fill in data here
 
