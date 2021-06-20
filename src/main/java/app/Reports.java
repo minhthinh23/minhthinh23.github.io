@@ -1,6 +1,6 @@
 package app;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -20,9 +20,10 @@ public class Reports implements Handler {
     // URL of this page relative to http://localhost:7000/
     public static final String URL = "/reports";
   
+
     public static String dateFormat(String date){
         String[] broke = date.split("/");
-        return broke[2].length() > 2 ? broke[2].substring(broke[2].length() - 2) : broke[2]+"/"+broke[1]+"/"+broke[0];
+        return broke[2].length() > 2 ? broke[2].substring(broke[2].length() - 2) +"/"+broke[1]+"/"+broke[0] : broke[2]+"/"+broke[1]+"/"+broke[0];
     }
 
     @Override
@@ -34,8 +35,6 @@ public class Reports implements Handler {
         // JDBC Connection
         JDBCConnection jdbc = new JDBCConnection();
 
-        // Get all the data here
-        ArrayList<String> movies = jdbc.getMovies();
 
 
         // HTML form for filtering data (Seperated just cause we might need to edit it)
@@ -47,13 +46,6 @@ public class Reports implements Handler {
                 "<p class='text-gray-500'> To:</p>" +
                 "<input type='text' name='date_end' id='date_end' class='inp'> <img src='calendar.svg' alt='calendar'>" +
             "</div>" +
-            "<select name='sort_by' id='sort_by' class='select w-60 text-center'>" +
-                    "<option value='worldwide' class='text-center'>--- SELECT ---</option>" +
-                    "<option value='1' class='text-center'>Total Deaths</option>" +
-                    "<option value='1' class='text-center'>Deaths per Capita</option>" +
-                    "<option value='1' class='text-center'>Fatality Rate</option>" +
-                    "<option value='1' class='text-center'>Infections to death per Capita</option>" +
-                "</select>" +
             "<input type='submit' value='Go' class='submit'>" +
         "</form>";
 
@@ -61,105 +53,53 @@ public class Reports implements Handler {
 
         // Run loop here to fill the table with all data
       
-        String date_begin = context.formParam("date_begin");
-        String date_end = context.formParam("date_end");
-        //String date_begin = context.formParam("date_begin");
-
+        String entrydate_textbox_unformatted = context.formParam("date_begin");
+        String exitdate_textbox_unformatted = context.formParam("date_end");
        //String date_begin = dateFormat(date_beginNotFormatted);
         //String date_end = dateFormat(date_endNotFormatted);
-        
 
         //ISSUE: DATES ARE STORED AS yy/MM/dd in SQL however inputted as dd/MM/yyyy//
-
-
-
         //Loop if no dates are entered//
         html = html + "<p><i>Country data from 20/01/2020 until 21/04/2021-option 1(test)</i></p>"; 
-
-        if (date_begin == null || date_begin == "") {
-
-                for(int i = 1; i < 191; i++){
-                    html = html + "<tr data-country='countryName1'>";
-                    ArrayList<String> countryData = jdbc.printCountryReportData(i);
-            
-                    for(int j = 0; j < 5; j++){
-                        html = html + "<td>" + countryData.get(j) + "</td>";
+        if (entrydate_textbox_unformatted == null || entrydate_textbox_unformatted == "") {
+            html = html + "<p> test 1</p>";
+            for(int i = 1; i < 191; i++){
+                html = html + "<tr data-country='"+i+"' onClick='var country = $(this).data(`country`); showData(country)'>";
+                ArrayList<String> countryData = jdbc.printCountryReportData(i);
+                for(int j = 0; j < 5; j++){
+                    if(j == 0){
+                        html = html +                            
+                        "<td class='flex items-center'>" + "<img src='https://www.countryflags.io/"+ countryData.get(j) +"/shiny/32.png' class='rounded rounded-md mr-3'>" + countryData.get(j + 1) + "</td>";
+                    }else{
+                        html = html + "<td>" + countryData.get(j + 1) + "</td>";
                     }
-                    html = html + "</tr>";
                 }
+                html = html + "</tr>";
+            }
         }
-
-
         //Loop if dates are entered//
         else{
             //html = html + "<p>" + date_begin +"</p>";
             //html = html + "<p><i>Country data from" + date_begin + " until " + date_end + " -option 2(test)</i></p>"; 
+            html = html + "<p> test 2</p>";
+            String entrydate_textbox = dateFormat(entrydate_textbox_unformatted);
+            String exitdate_textbox = dateFormat(exitdate_textbox_unformatted);
             for(int i = 1; i < 191; i++){
-                html = html + "<tr data-country='countryName1'>";
-                ArrayList<String> countryData = jdbc.printCountryReportDataWithRange(i, date_begin, date_end);
-        
+                html = html + "<tr data-country='"+i+"' onClick='var country = $(this).data(`country`); showData(country)'>";
+                ArrayList<String> countryData = jdbc.printCountryReportDataWithRange(i, entrydate_textbox, exitdate_textbox);
                 for(int j = 0; j < 5; j++){
-                    html = html + "<td>" + countryData.get(j) + "</td>";
+                    if(j == 0){
+                        html = html +                        
+                        "<td class='flex items-center'>" + "<img src='https://www.countryflags.io/"+ countryData.get(j) +"/shiny/32.png' class='rounded rounded-md mr-3'>" +countryData.get(j + 1) + "</td>";
+                    }else{
+                        html = html + "<td>" + countryData.get(j + 1) + "</td>";
+                    }
                 }
                 html = html + "</tr>";
             }
         }  
-        
-
-
-
-
-        // End loop
-
         html = html + " </tbody> </table> </div></div></div><div class='country bg-black bg-opacity-20 flex justify-center hidden' id='countryModal'> <div class='data self-center px-3 py-2 relative' id='countryModalData'>";
-
-        // JavaScript material to put data in Country Modal [id='countryModalData']
-        
-        // <div class='close absolute right-2 top-1'> <span class='fas fa-times'></span> </div>
-        // <div class='data-country-items'>
-        //     <div class='country-name mb-4'>
-        //         <h1 class='text-2xl font-semibold'>Australia</h1>
-        //     </div>
-        //     <div class='flex flex-row flex-wrap'>
-        //         <div class='base'>
-        //             <div class='death flex justify-between text-lg'>
-        //                 <h1>Death:</h1>
-        //                 <h1>:&nbsp;&nbsp;&nbsp;&nbsp;24 M</h1>
-        //             </div>
-        //             <div class='recovery flex justify-between text-lg'>
-        //                 <h1>Recovery</h1>
-        //                 <h1>:&nbsp;&nbsp;&nbsp;&nbsp;24 M</h1>
-        //             </div>
-        //             <div class='fatality flex justify-between text-lg'>
-        //                 <h1>Fatality</h1>
-        //                 <h1>:&nbsp;&nbsp;&nbsp;&nbsp;24 M</h1>
-        //             </div>
-        //             <div class='infections flex justify-between text-lg mb-2'>
-        //                 <h1>Infections to death per Capita</h1>
-        //                 <h1>:&nbsp;&nbsp;&nbsp;&nbsp;24 M</h1>
-        //             </div>
-        //             <hr>
-        //             <br>
-        //             <div class='extra'>
-        //                 <div class='latlong'>
-        //                     <h1 class='font-light'>Latutude/ Longitude:</h1>
-        //                     <h1 class='text-xl'>+67.2452345/ -87.2837332</h1>
-        //                 </div>
-        //                 <div class='population'>
-        //                     <h1 class='font-light'>Population:</h1>
-        //                     <h1 class='text-xl'>86238576</h1>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //         <div class='chart'>
-        //             <canvas class='px-4' id='canvas'></canvas>
-        //         </div>
-        //     </div>
-        // </div>
-
-        // Finish the HTML webpage
         html = html + " </div></div><script defer src='https://use.fontawesome.com/releases/v5.15.3/js/all.js' integrity='sha384-haqrlim99xjfMxRP6EWtafs0sB1WKcMdynwZleuUSwJR0mDeRYbhtY+KPMr+JL6f' crossorigin='anonymous'></script> <script src='https://code.jquery.com/jquery-3.5.1.js'></script> <script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'></script> <script src='jquery-ui.min.js'></script> <script src='https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js'></script> <script src='main.js'></script></body></html>";
-
         context.html(html);
     }
 

@@ -1,6 +1,6 @@
 package app;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -19,6 +19,11 @@ public class Deaths implements Handler {
     // URL of this page relative to http://localhost:7000/
     public static final String URL = "/deaths";
 
+    public static String dateFormat(String date){
+        String[] broke = date.split("/");
+        return broke[2].length() > 2 ? broke[2].substring(broke[2].length() - 2) +"/"+broke[1]+"/"+broke[0] : broke[2]+"/"+broke[1]+"/"+broke[0];
+    }
+
     @Override
     public void handle(Context context) throws Exception {
         // Create a simple HTML webpage in a String
@@ -27,8 +32,6 @@ public class Deaths implements Handler {
         
         JDBCConnection jdbc = new JDBCConnection();
 
-        // Fetch all data here
-        ArrayList<String> movies = jdbc.getMovies();
 
 
         // Assign these variables with details as named | All these are used in text below and will give error if not assigned
@@ -38,7 +41,7 @@ public class Deaths implements Handler {
         int totalDeaths = 0;
 
         html = html + 
-        "<form action='' method='get' class='flex flex-row flex-wrap'>" +
+        "<form action='/deaths' method='POST' class='flex flex-row flex-wrap'>" +
             "<select name='country' id='country' class='select w-28'>" +
                 "<option value='worldwide'>Worldwide</option>" +
                 "<option value='AUS'>Australia</option>" +
@@ -57,19 +60,40 @@ public class Deaths implements Handler {
         html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Confirm Deaths</h1> <p class='text-gray-500 text-sm'>" + confirmedDeaths + 
         "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Global per capita</h1> <p class='text-gray-500 text-sm'>" + globalPerCapitaDeath + 
         "</p></div></div><div class='data-tables px-3' data-check='side'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Country</th> <th id='data-death'>Population</th> <th id='data-recovery'>Deaths</th> <th>Average Deaths per Day</th><th>Most Fatalities in a Day</th> </tr></thead> <tbody>";
-
+        
+        
+        String entrydate_textbox_unformatted = context.formParam("date_begin");
+        String exitdate_textbox_unformatted = context.formParam("date_end");
 
         // Loop for left side table on the Deaths page (All countries table)
 
-        for(int i = 1; i < 191; i++){
-            html = html + "<tr data-country='none'>";
+        if (entrydate_textbox_unformatted == null || entrydate_textbox_unformatted == "") {
+            html = html + "<p> test 1</p>";
+            for(int i = 1; i < 191; i++){
+                html = html + "<tr data-country='none'>";
+                ArrayList<String> countryData = jdbc.printCountryDeathsData(i);
+                html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
 
-            ArrayList<String> countryData = jdbc.printCountryDeathsData(i);
-            html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
-
-            for(int j = 0; j < 4; j++){
-                html = html + "<td>" + countryData.get(j) + "</td>";
+                for(int j = 0; j < 4; j++){
+                    html = html + "<td>" + countryData.get(j) + "</td>";
+                }
             }
+        }
+
+        else{
+            html = html + "<p> test 2</p>";
+            String entrydate_textbox = dateFormat(entrydate_textbox_unformatted);
+            String exitdate_textbox = dateFormat(exitdate_textbox_unformatted);
+            for(int i = 1; i < 191; i++){
+                html = html + "<tr data-country='none'>";
+                html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
+                ArrayList<String> countryData = jdbc.printCountryDeathDataWithRange(i, entrydate_textbox, exitdate_textbox);
+        
+                for(int j = 0; j < 4; j++){
+                    html = html + "<td>" + countryData.get(j) + "</td>";
+                }
+                html = html + "</tr>";
+            }   
         }
 
         // <div> element of graph in line 70
@@ -77,14 +101,14 @@ public class Deaths implements Handler {
         
         // List all countries to select as option to filter
         ArrayList<String> category = jdbc.getCountryList();
-        html = html + "<form action='' method='get' class='flex flex-row flex-wrap'>" +
-            "<select name='country' id='country' class='select w-28'>";
+        html = html + "<form action='/deaths' method='POST' class='flex flex-row flex-wrap'>" +
+            "<select name='country2' id='country2' class='select w-28'>";
     
 
 
-            html = html + "<option value='worldwide>Worldwide</option>";
+            html = html + "<option></option>";
             for (String categories : category) {
-                html = html + "<option value='AUS'>" + categories + "</option>";
+                html = html + "<option>" + categories + "</option>";
             }
             html = html + "      </select>";
 
@@ -110,7 +134,9 @@ public class Deaths implements Handler {
         "</form>";
         
         html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Total Cases</h1> <p class='text-gray-500 text-sm'>" + totalCases + "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Total Deaths</h1> <p class='text-gray-500 text-sm'>" + totalDeaths + "</p></div></div><div class='data-tables px-3' data-check='side'> <div class='sides'> <h1 class='text-xl mb-4 font-semibold'>Figures</h1>"; 
-        
+       
+       
+        String Countryname_drop = context.formParam("country2");
 
         // Left botton Heading Value pair - refer to figma for what data is to be put here
         /*
@@ -125,13 +151,27 @@ public class Deaths implements Handler {
         CloserLookDeathHeaders.add("Mortality Rate");
         CloserLookDeathHeaders.add("Deadliest Day");
         
-        ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsData("Australia");
+       if (Countryname_drop == null || Countryname_drop == ""){
+        ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsData("US");
+        html = html + "<h2>US</h2>";
         for (int i = 0; i < 4; i++){
             html = html + "<div class='col flex py-3 px-2 border-t border-gray-400 justify-between'>";
             html = html + "<h1>" + CloserLookDeathHeaders.get(i) + "</h1>";
             html = html + "<h1>" + CloserLookDeathData.get(i) + "</h1>";
             html = html + "</div>";
         }
+
+       } 
+       else{
+        html = html + "<h2>" + Countryname_drop+ "</h2>";
+        ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsData(Countryname_drop);
+        for (int i = 0; i < 4; i++){
+            html = html + "<div class='col flex py-3 px-2 border-t border-gray-400 justify-between'>";
+            html = html + "<h1>" + CloserLookDeathHeaders.get(i) + "</h1>";
+            html = html + "<h1>" + CloserLookDeathData.get(i) + "</h1>";
+            html = html + "</div>";
+        }
+    }
 
 
         html = html + " </div></div></div></div></div></div></div></div><script defer src='https://use.fontawesome.com/releases/v5.15.3/js/all.js' integrity='sha384-haqrlim99xjfMxRP6EWtafs0sB1WKcMdynwZleuUSwJR0mDeRYbhtY+KPMr+JL6f' crossorigin='anonymous'></script> <script src='https://code.jquery.com/jquery-3.5.1.js'></script> <script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'></script> <script src='jquery-ui.min.js'></script> <script src='https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js'></script> <script src='https://cdn.amcharts.com/lib/4/core.js'></script> <script src='https://cdn.amcharts.com/lib/4/maps.js'></script> <script src='https://cdn.amcharts.com/lib/4/geodata/usaLow.js'></script> <script src='https://cdn.amcharts.com/lib/4/themes/animated.js'></script><script src='main.js'></script></body></html>";

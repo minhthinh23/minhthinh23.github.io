@@ -69,6 +69,8 @@ public class Infections implements Handler {
       
         
     // IF NO DATE IS INPUTTED//
+
+    //TO DO: ADD MAPS HERE///
         if (entrydate_textbox_unformatted == null || entrydate_textbox_unformatted == ""){
             //IF NO COUNTRY IS INPUTTED//
             if (Countryname_drop == null || Countryname_drop == ""){
@@ -167,6 +169,10 @@ public class Infections implements Handler {
 
         // Table rows | Use Loopto fill in data here
 
+        
+        
+        
+        
         html = html + jdbc.outputAustralianStateInfo("Victoria");
         html = html + jdbc.outputAustralianStateInfo("Queensland");
         html = html + jdbc.outputAustralianStateInfo("Tasmania");

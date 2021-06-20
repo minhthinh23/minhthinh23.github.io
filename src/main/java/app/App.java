@@ -47,6 +47,7 @@ public class App {
         app.get(Reports.URL, new Reports());
         app.get(Overview.URL, new Overview());
         app.get(Compare.URL, new Compare());
+        app.get(AJAX.URL, new AJAX());
         
         // Fetch Data (POST)
         app.post(Infections.URL, new Infections());
