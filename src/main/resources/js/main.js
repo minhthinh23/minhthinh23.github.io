@@ -42,8 +42,8 @@ $(document).ready(function () {
     dateFormat: "dd/mm/yy",
     // autoSize: true,
     hideIfNoPrevNext: true,
-    minDate: new Date(2020, 1 - 1, 1),
-    maxDate: new Date(2021, 1 - 1, 31),
+    minDate: new Date(2020, 1 - 1, 20),
+    maxDate: new Date(2021, 4 - 1, 20),
     navigationAsDateFormat: true,
     onClose: function (selectedDate) {
       $(".to_date").datepicker("option", "minDate", selectedDate);
@@ -55,8 +55,8 @@ $(document).ready(function () {
     dateFormat: "dd/mm/yy",
     // autoSize: true,
     hideIfNoPrevNext: true,
-    minDate: new Date(2020, 1 - 1, 1),
-    maxDate: new Date(2021, 1 - 1, 31),
+    minDate: new Date(2020, 1 - 1, 21),
+    maxDate: new Date(2021, 4 - 1, 21),
     navigationAsDateFormat: true
   });
 

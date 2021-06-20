@@ -6,12 +6,6 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 
 
-import java.time.LocalDate;
-import java.time.LocalDateTime; 
-import java.time.format.DateTimeFormatter;
-import java.text.SimpleDateFormat;  
-import java.util.Date;  
-
 /**
  * Example Index HTML class using Javalin
  * <p>
@@ -25,6 +19,11 @@ public class Reports implements Handler {
 
     // URL of this page relative to http://localhost:7000/
     public static final String URL = "/reports";
+  
+    public static String dateFormat(String date){
+        String[] broke = date.split("/");
+        return broke[2].length() > 2 ? broke[2].substring(broke[2].length() - 2) : broke[2]+"/"+broke[1]+"/"+broke[0];
+    }
 
     @Override
     public void handle(Context context) throws Exception {
