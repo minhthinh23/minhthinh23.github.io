@@ -54,6 +54,16 @@ public class Infections implements Handler {
             "<td>61</td>" +
             "<td>2011/04/25</td>" +
         "</tr>";
+        for(int i = 1; i < 191; i++){
+            html = html + "<tr data-country='none'>";
+
+            ArrayList<String> countryData = jdbc.printCountryData(i);
+            html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
+
+            for(int j = 0; j < 5; j++){
+                html = html + "<td>" + countryData.get(j) + "</td>";
+            }
+        }
 
         html = html + "</tbody> </table> </div></div><div class='right'> <div class='top mt-4 border rounded-xl border-gray-300 py-3 px-4 ml-3' id='maps'>";
         
