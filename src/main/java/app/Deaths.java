@@ -56,20 +56,24 @@ public class Deaths implements Handler {
 
         html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Confirm Deaths</h1> <p class='text-gray-500 text-sm'>" + confirmedDeaths + 
         "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Global per capita</h1> <p class='text-gray-500 text-sm'>" + globalPerCapitaDeath + 
-        "</p></div></div><div class='data-tables px-3' data-check='side'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Death/ Infection Ratio</th> <th id='data-death'>Per Capita</th> <th id='data-recovery'>Deaths</th> </tr></thead> <tbody>";
+        "</p></div></div><div class='data-tables px-3' data-check='side'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Country</th> <th id='data-death'>Population</th> <th id='data-recovery'>Deaths</th> <th>Average Deaths per Day</th><th>Most Fatalities in a Day</th> </tr></thead> <tbody>";
 
 
         // Loop for left side table on the Deaths page (All countries table)
-        html = html + 
-        "<tr data-country='none'>" +
-            "<td>Edinburgh</td>" + //Death/ Infection Ratio
-            "<td>61</td>" + //Per Capita
-            "<td>2011/04/25</td>" + //Deaths
-        "</tr>" +
 
+        for(int i = 1; i < 191; i++){
+            html = html + "<tr data-country='none'>";
+
+            ArrayList<String> countryData = jdbc.printCountryDeathsData(i);
+            html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
+
+            for(int j = 0; j < 4; j++){
+                html = html + "<td>" + countryData.get(j) + "</td>";
+            }
+        }
 
         // <div> element of graph in line 70
-        "</tbody> </table> </div></div><div class='right'> <div class='top-chart mt-4 border rounded-xl border-gray-300 py-3 px-4 ml-3'> <div class='chart'> <canvas class='px-4' id='graph'></canvas> </div></div><div class='bottom mt-2 border rounded-xl border-gray-300 py-3 px-4 ml-3'> <div class='head border-b border-gray-300 pb-1'> <div class='heading'> <div class='title'>" +
+        html = html + "</tbody> </table> </div></div><div class='right'> <div class='top-chart mt-4 border rounded-xl border-gray-300 py-3 px-4 ml-3'> <div class='chart'> <canvas class='px-4' id='graph'></canvas> </div></div><div class='bottom mt-2 border rounded-xl border-gray-300 py-3 px-4 ml-3'> <div class='head border-b border-gray-300 pb-1'> <div class='heading'> <div class='title'>" +
         
         // List all countries to select as option to filter
         "<form action='' method='get' class='flex flex-row flex-wrap'>" +
@@ -97,7 +101,7 @@ public class Deaths implements Handler {
             "<input type='submit' value='Go' class='submit'>" +
         "</form>";
         
-        html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Total Cases</h1> <p class='text-gray-500 text-sm'>" + totalCases + "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Total Deaths</h1> <p class='text-gray-500 text-sm'>" + totalDeaths + "</p></div></div><div class='data-tables px-3' data-check='side'> <div class='sides'> <h1 class='text-xl mb-4 font-semibold'>Figures</h1>"+ 
+        html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Total Cases</h1> <p class='text-gray-500 text-sm'>" + totalCases + "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Total Deaths</h1> <p class='text-gray-500 text-sm'>" + totalDeaths + "</p></div></div><div class='data-tables px-3' data-check='side'> <div class='sides'> <h1 class='text-xl mb-4 font-semibold'>Figures</h1>"; 
         
 
         // Left botton Heading Value pair - refer to figma for what data is to be put here
@@ -107,12 +111,22 @@ public class Deaths implements Handler {
         3.Mortality Rate
         4.Deadliest Day
         */
-        "<div class='col flex py-3 px-2 border-t border-gray-400 justify-between'>" +
-            "<h1>Heading</h1>" +
-            "<h1>Value</h1>" +
-        "</div>" + 
+        ArrayList<String> CloserLookDeathHeaders= new ArrayList<String>();
+        CloserLookDeathHeaders.add("Total Deaths");
+        CloserLookDeathHeaders.add("Total Deaths per capita");
+        CloserLookDeathHeaders.add("Mortality Rate");
+        CloserLookDeathHeaders.add("Deadliest Day");
+        
+        ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsData(1);
+        for (int i = 0; i < 4; i++){
+            html = html + "<div class='col flex py-3 px-2 border-t border-gray-400 justify-between'>";
+            html = html + "<h1>" + CloserLookDeathHeaders.get(i) + "</h1>";
+            html = html + "<h1>" + CloserLookDeathData.get(i) + "</h1>";
+            html = html + "</div>";
+        }
 
-        " </div></div></div></div></div></div></div></div><script defer src='https://use.fontawesome.com/releases/v5.15.3/js/all.js' integrity='sha384-haqrlim99xjfMxRP6EWtafs0sB1WKcMdynwZleuUSwJR0mDeRYbhtY+KPMr+JL6f' crossorigin='anonymous'></script> <script src='https://code.jquery.com/jquery-3.5.1.js'></script> <script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'></script> <script src='jquery-ui.min.js'></script> <script src='https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js'></script> <script src='https://cdn.amcharts.com/lib/4/core.js'></script> <script src='https://cdn.amcharts.com/lib/4/maps.js'></script> <script src='https://cdn.amcharts.com/lib/4/geodata/usaLow.js'></script> <script src='https://cdn.amcharts.com/lib/4/themes/animated.js'></script><script src='main.js'></script></body></html>";
+
+        html = html + " </div></div></div></div></div></div></div></div><script defer src='https://use.fontawesome.com/releases/v5.15.3/js/all.js' integrity='sha384-haqrlim99xjfMxRP6EWtafs0sB1WKcMdynwZleuUSwJR0mDeRYbhtY+KPMr+JL6f' crossorigin='anonymous'></script> <script src='https://code.jquery.com/jquery-3.5.1.js'></script> <script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'></script> <script src='jquery-ui.min.js'></script> <script src='https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js'></script> <script src='https://cdn.amcharts.com/lib/4/core.js'></script> <script src='https://cdn.amcharts.com/lib/4/maps.js'></script> <script src='https://cdn.amcharts.com/lib/4/geodata/usaLow.js'></script> <script src='https://cdn.amcharts.com/lib/4/themes/animated.js'></script><script src='main.js'></script></body></html>";
 
         // DO NOT MODIFY THIS
         // Makes Javalin render the webpage

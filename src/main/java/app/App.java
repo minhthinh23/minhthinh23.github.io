@@ -52,6 +52,7 @@ public class App {
         app.post(Infections.URL, new Infections());
         app.post(Compare.URL, new Compare());
         app.post(Reports.URL, new Reports());
+        app.post(Deaths.URL, new Deaths());
     }
 
 }

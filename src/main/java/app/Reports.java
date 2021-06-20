@@ -65,8 +65,8 @@ public class Reports implements Handler {
         String date_end = context.formParam("date_end");
         //String date_begin = context.formParam("date_begin");
 
-       //date_begin = dateFormat(date_begin);
-        //date_end = dateFormat(date_end);
+       //String date_begin = dateFormat(date_beginNotFormatted);
+        //String date_end = dateFormat(date_endNotFormatted);
         
 
         //ISSUE: DATES ARE STORED AS yy/MM/dd in SQL however inputted as dd/MM/yyyy//
@@ -92,11 +92,8 @@ public class Reports implements Handler {
 
         //Loop if dates are entered//
         else{
-            date_begin = dateFormat(date_begin);
-            html = html + "<p>" + date_begin +"</p>";
-            html = html + "<p><i>Country data from" + date_begin + " until " + date_end + " -option 2(test)</i></p>"; 
-                String date_begin2 = dateFormat(date_begin);
-                String date_end2 = dateFormat(date_end);
+            //html = html + "<p>" + date_begin +"</p>";
+            //html = html + "<p><i>Country data from" + date_begin + " until " + date_end + " -option 2(test)</i></p>"; 
             for(int i = 1; i < 191; i++){
                 html = html + "<tr data-country='countryName1'>";
                 ArrayList<String> countryData = jdbc.printCountryReportDataWithRange(i, date_begin, date_end);
