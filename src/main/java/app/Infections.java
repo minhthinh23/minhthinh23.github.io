@@ -1,6 +1,6 @@
 package app;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -19,6 +19,14 @@ public class Infections implements Handler {
     // URL of this page relative to http://localhost:7000/
     public static final String URL = "/infections-by-country";
 
+
+
+    public static String dateFormat(String date){
+        String[] broke = date.split("/");
+        return broke[2].length() > 2 ? broke[2].substring(broke[2].length() - 2) +"/"+broke[1]+"/"+broke[0] : broke[2]+"/"+broke[1]+"/"+broke[0];
+    }
+
+
     @Override
     public void handle(Context context) throws Exception {
         JDBCConnection jdbc = new JDBCConnection();
@@ -27,13 +35,17 @@ public class Infections implements Handler {
         // Makesure to re-assign these variables
         int deaths = 0;
         int cases = 0;
+        ArrayList<String> category = jdbc.getCountryList();
 
         html = html + 
-        "<form action='' method='get' class='flex flex-row flex-wrap'>" +
-            "<select name='country' id='country' class='select w-28'>" +
-                "<option value='worldwide'>Worldwide</option>" +
-                "<option value='AUS'>Australia</option>" +
-            "</select>" +
+        "<form action='/infections-by-country' method='POST' class='flex flex-row flex-wrap'>" +
+            "<select name='country' id='country' class='select w-28'>";
+            html = html + "<option></option>";
+
+            for (String categories : category) {
+                html = html + "<option>" + categories + "</option>";
+            }
+            html = html + " </select>" +
             "<div class='time-period flex flex-nowrap px-2' style='height: 26px;'>" +
                 "<p class='text-gray-500'>From:</p>" +
                 "<input type='text' name='date_begin' id='date_begin' class='inp'>" +
@@ -49,16 +61,73 @@ public class Infections implements Handler {
 
         // Loop through to fill table content (Check figme to know what data to fill | Check column headers)
 
-        for(int i = 1; i < 191; i++){
-            html = html + "<tr data-country='none'>";
+        //IF NO DATE IS INPUTTED//
+    
+        String entrydate_textbox_unformatted = context.formParam("date_begin");
+        String exitdate_textbox_unformatted = context.formParam("date_end");
+        String Countryname_drop = context.formParam("country");
+      
+        
+    // IF NO DATE IS INPUTTED//
+        if (entrydate_textbox_unformatted == null || entrydate_textbox_unformatted == ""){
+            //IF NO COUNTRY IS INPUTTED//
+            if (Countryname_drop == null || Countryname_drop == ""){
+                html = html + "<p> test 1</p>";
+                for(int i = 1; i < 191; i++){
+                    html = html + "<tr data-country='none'>";
 
-            ArrayList<String> countryData = jdbc.printCountryData(i);
-            html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
+                    ArrayList<String> countryData = jdbc.printCountryData(i);
+                    html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
 
-            for(int j = 0; j < 5; j++){
-                html = html + "<td>" + countryData.get(j) + "</td>";
+                    for(int j = 0; j < 5; j++){
+                        html = html + "<td>" + countryData.get(j) + "</td>";
+                    }
+                }
+            }
+            //IF COUNTRY IS INPUTTED//
+            else{
+                html = html + "<p> test 2</p>";
+                html = html + "<tr data-country='none'>";
+                ArrayList<String> countryData = jdbc.printCountryDataStringInput(Countryname_drop);
+                for(int j = 0; j < 6; j++){
+                    html = html + "<td>" + countryData.get(j) + "</td>";
+                }
+            } 
+        }
+        //IF DATE IS INPUTTED
+        else{
+         //IF NO COUNTRY IS INPUTTED
+            if(Countryname_drop == null || Countryname_drop == ""){
+                html = html + "<p> test 3</p>";  
+                String entrydate_textbox = dateFormat(entrydate_textbox_unformatted);
+                String exitdate_textbox = dateFormat(exitdate_textbox_unformatted);
+                for(int i = 1; i < 191; i++){
+                    html = html + "<tr data-country='none'>";
+
+                    ArrayList<String> countryData = jdbc.printCountryDataWithRange(i, entrydate_textbox, exitdate_textbox);
+                    html = html + "<td>" + JDBCConnection.printCountryName(i) + "</td>";
+
+                    for(int j = 0; j < 5; j++){
+                        html = html + "<td>" + countryData.get(j) + "</td>";
+                    }
+                }
+            }
+            else{
+                html = html + "<p> test 4</p>";   
+                String entrydate_textbox = dateFormat(entrydate_textbox_unformatted);
+                String exitdate_textbox = dateFormat(exitdate_textbox_unformatted);
+                html = html + "<tr data-country='none'>";
+                
+                ArrayList<String> countryData = jdbc.printCountryDataWithRangeStringInput(Countryname_drop, entrydate_textbox, exitdate_textbox);
+                for(int j = 0; j < 6; j++){
+                    html = html + "<td>" + countryData.get(j) + "</td>";
+                }
             }
         }
+        
+
+            
+
 
         html = html + "</tbody> </table> </div></div><div class='right'> <div class='top mt-4 border rounded-xl border-gray-300 py-3 px-4 ml-3' id='maps'>";
         

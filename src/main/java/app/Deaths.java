@@ -73,15 +73,23 @@ public class Deaths implements Handler {
         }
 
         // <div> element of graph in line 70
-        html = html + "</tbody> </table> </div></div><div class='right'> <div class='top-chart mt-4 border rounded-xl border-gray-300 py-3 px-4 ml-3'> <div class='chart'> <canvas class='px-4' id='graph'></canvas> </div></div><div class='bottom mt-2 border rounded-xl border-gray-300 py-3 px-4 ml-3'> <div class='head border-b border-gray-300 pb-1'> <div class='heading'> <div class='title'>" +
+        html = html + "</tbody> </table> </div></div><div class='right'> <div class='top-chart mt-4 border rounded-xl border-gray-300 py-3 px-4 ml-3'> <div class='chart'> <canvas class='px-4' id='graph'></canvas> </div></div><div class='bottom mt-2 border rounded-xl border-gray-300 py-3 px-4 ml-3'> <div class='head border-b border-gray-300 pb-1'> <div class='heading'> <div class='title'>";
         
         // List all countries to select as option to filter
-        "<form action='' method='get' class='flex flex-row flex-wrap'>" +
-            "<select name='country' id='country' class='select w-28'>" +
-                "<option value='worldwide'>Worldwide</option>" +
-                "<option value='AUS'>Australia</option>" +
-            "</select>" +
-            "<input type='submit' value='Go' class='submit'>" +
+        ArrayList<String> category = jdbc.getCountryList();
+        html = html + "<form action='' method='get' class='flex flex-row flex-wrap'>" +
+            "<select name='country' id='country' class='select w-28'>";
+    
+
+
+            html = html + "<option value='worldwide>Worldwide</option>";
+            for (String categories : category) {
+                html = html + "<option value='AUS'>" + categories + "</option>";
+            }
+            html = html + "      </select>";
+
+            
+            html = html + "<input type='submit' value='Go' class='submit'>" +
         "</form>" +
 
         " </div></div></div><div class='sorting flex flex-row flex-wrap'>" +
@@ -117,7 +125,7 @@ public class Deaths implements Handler {
         CloserLookDeathHeaders.add("Mortality Rate");
         CloserLookDeathHeaders.add("Deadliest Day");
         
-        ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsData(1);
+        ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsData("Australia");
         for (int i = 0; i < 4; i++){
             html = html + "<div class='col flex py-3 px-2 border-t border-gray-400 justify-between'>";
             html = html + "<h1>" + CloserLookDeathHeaders.get(i) + "</h1>";

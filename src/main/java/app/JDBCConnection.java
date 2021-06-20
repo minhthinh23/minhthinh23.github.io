@@ -905,7 +905,127 @@ public ArrayList<String> printCountryDataWithRange(int k, String i, String j) {
         return countryData;
     }
 
+    public ArrayList<String> printCountryDataWithRangeStringInput(String k, String i, String j) {
+        ArrayList<String> countryData = new ArrayList<String>();
 
+        // Setup the variable for the JDBC connection
+        Connection connection = null;
+
+        try {
+            // Connect to JDBC data base
+            connection = DriverManager.getConnection(DATABASE);
+
+            // Prepare a new SQL Query & Set a timeout
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+
+            // The Query
+            String query = "SELECT *, Longitude, Latitude, Population, sum(no_cases), max(no_cases), date FROM COUNTRY JOIN COUNTRYDATA ON COUNTRY.Country_Name = COUNTRYDATA.Country_Name WHERE COUNTRY.Country_name ='" + k + "' AND DATE BETWEEN '" + i +"' AND '" + j +"';";
+            System.out.println(query);
+            
+            // Get Result
+            ResultSet results = statement.executeQuery(query);
+
+            // Process all of the results
+            while (results.next()) {
+                String name            = results.getString("Country_name");
+                String Longitude    = results.getString("Longitude");
+                String Latitude      = results.getString("Latitude");
+                String Total_Cases     = results.getString("sum(no_cases)");
+                String Population      = results.getString("Population");
+                String max_Cases       = results.getString("max(no_cases)");
+                //String perCapita       = results.getString("ROUND(((total_cases*1.0)/(population*1.0))*1000000, 2)");
+                String date            = results.getString("date");
+                countryData.add(name);
+                countryData.add(Longitude);
+                countryData.add(Latitude);
+                countryData.add(Population);
+                countryData.add(Total_Cases);
+                //countryData.add(perCapita);
+                max_Cases = max_Cases + " - " + date;
+                countryData.add(max_Cases);
+            }
+
+            // Close the statement because we are done with it
+            statement.close();
+        } catch (SQLException e) {
+            // If there is an error, lets just pring the error
+            System.err.println(e.getMessage());
+        } finally {
+            // Safety code to cleanup
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return countryData;
+    }   
+ 
+    public ArrayList<String> printCountryDataStringInput(String i) {
+        ArrayList<String> countryData = new ArrayList<String>();
+
+        // Setup the variable for the JDBC connection
+        Connection connection = null;
+
+        try {
+            // Connect to JDBC data base
+            connection = DriverManager.getConnection(DATABASE);
+
+            // Prepare a new SQL Query & Set a timeout
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+
+            // The Query
+            String query = "SELECT *,ROUND(((total_cases*1.0)/(population*1.0))*1000000, 2), MAX(No_Cases) FROM COUNTRY JOIN COUNTRYDATA ON COUNTRY.Country_Name = COUNTRYDATA.Country_Name WHERE COUNTRY.Country_name='" + i + "';";
+            System.out.println(query);
+            
+            // Get Result
+            ResultSet results = statement.executeQuery(query);
+
+            // Process all of the results
+            while (results.next()) {
+                String name         = results.getString("Country_name");
+                String Longitude    = results.getString("Longitude");
+                String Latitude      = results.getString("Latitude");
+                String Total_Cases     = results.getString("Total_Cases");
+                String Population      = results.getString("Population");
+                String max_Cases       = results.getString("MAX(No_Cases)");
+                //String perCapita       = results.getString("ROUND(((total_cases*1.0)/(population*1.0))*1000000, 2)");
+                String date            = results.getString("Date");
+                countryData.add(name);
+                countryData.add(Longitude);
+                countryData.add(Latitude);
+                countryData.add(Population);
+                countryData.add(Total_Cases);
+                //countryData.add(perCapita);
+                max_Cases = max_Cases + " - " + date;
+                countryData.add(max_Cases);
+            }
+
+            // Close the statement because we are done with it
+            statement.close();
+        } catch (SQLException e) {
+            // If there is an error, lets just pring the error
+            System.err.println(e.getMessage());
+        } finally {
+            // Safety code to cleanup
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return countryData;
+    }
 
 //FUNCTIONS DEATHS PAGE//
 public ArrayList<String> printCountryDeathsData(int i) {
@@ -966,7 +1086,7 @@ public ArrayList<String> printCountryDeathsData(int i) {
 }
 
 
-public ArrayList<String> printCloserLookDeathsData(int i) { 
+public ArrayList<String> printCloserLookDeathsData(String i) { 
     ArrayList<String> countryData = new ArrayList<String>();
 
     // Setup the variable for the JDBC connection
@@ -981,7 +1101,7 @@ public ArrayList<String> printCloserLookDeathsData(int i) {
         statement.setQueryTimeout(30);
 
         // The Query
-        String query = "SELECT COUNTRY.COUNTRY_NAME, SUM(No_Deaths) ,ROUND(((total_deaths*1.0)/(population*1.0))*1000000, 2) AS per_Capita, ROUND((SUM(NO_DEATHS*1.0)/SUM(NO_CASES*1.0))*100,2) AS Mortality_Rate, MAX(NO_DEATHS) ,DATE FROM COUNTRY JOIN COUNTRYDATA ON COUNTRY.Country_Name = COUNTRYDATA.Country_Name WHERE COUNTRY.ROWID=" + i + ";";
+        String query = "SELECT COUNTRY.COUNTRY_NAME, SUM(No_Deaths) ,ROUND(((total_deaths*1.0)/(population*1.0))*1000000, 2) AS per_Capita, ROUND((SUM(NO_DEATHS*1.0)/SUM(NO_CASES*1.0))*100,2) AS Mortality_Rate, MAX(NO_DEATHS) ,DATE FROM COUNTRY JOIN COUNTRYDATA ON COUNTRY.Country_Name = COUNTRYDATA.Country_Name WHERE COUNTRY.COUNTRY_NAME='" + i + ";";
         System.out.println(query);
         
         // Get Result
