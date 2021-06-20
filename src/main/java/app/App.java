@@ -31,7 +31,7 @@ public class App {
             config.addStaticFiles("DataTables/");
             config.addStaticFiles("jquery-ui/");
             config.addStaticFiles("js/");
-            config.addStaticFiles("node_modules/");
+            //config.addStaticFiles("node_modules/");
         }).start(JAVALIN_PORT);
 
 
@@ -51,6 +51,7 @@ public class App {
         // Fetch Data (POST)
         app.post(Infections.URL, new Infections());
         app.post(Compare.URL, new Compare());
+        app.post(Reports.URL, new Reports());
     }
 
 }

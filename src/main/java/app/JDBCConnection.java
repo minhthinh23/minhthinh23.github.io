@@ -956,4 +956,72 @@ public class JDBCConnection {
         return countryData;
     }   
 
+    public String outputStateInfo(String State) {
+        String html = "";
+
+
+        // Look up movies from JDBC
+        ArrayList<Integer> stateinfo = StateData(State);
+        
+        // Add HTML for the movies list
+        html = html + "<tr data-country='none'><td>" + State + "</td>";
+
+        for (Integer value : stateinfo) {
+            html = html + "<td>" + value + "</td>";
+        }
+        html = html + "</tr>";
+
+        return html;
+    }
+
+    public ArrayList<Integer> StateData(String countryName) {
+        ArrayList<Integer> countryData = new ArrayList<Integer>();
+
+        // Setup the variable for the JDBC connection
+        Connection connection = null;
+
+        try {
+            // Connect to JDBC data base
+            connection = DriverManager.getConnection(DATABASE);
+
+            // Prepare a new SQL Query & Set a timeout
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+
+            // The Query
+            String query = "SELECT REGION_NAME, TOTAL_CASES, TOTAL_DEATHS FROM REGION WHERE REGION_NAME = '" + countryName + "'";
+            System.out.println(query);
+            
+            // Get Result
+            ResultSet results = statement.executeQuery(query);
+
+            // Process all of the results
+            while (results.next()) {
+                
+                int Total_Cases     = results.getInt("Total_Cases");
+                int Total_Deaths    = results.getInt("Total_Deaths");
+                countryData.add(Total_Cases);
+                countryData.add(Total_Deaths);
+            }
+
+            // Close the statement because we are done with it
+            statement.close();
+        } catch (SQLException e) {
+            // If there is an error, lets just pring the error
+            System.err.println(e.getMessage());
+        } finally {
+            // Safety code to cleanup
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+        // Finally we return all of the movies
+        return countryData;
+    }
 }

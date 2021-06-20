@@ -40,7 +40,7 @@ public class Reports implements Handler {
 
         // HTML form for filtering data (Seperated just cause we might need to edit it)
         html = html + 
-        "<form action='' method='get' class='flex flex-row flex-wrap'>" + 
+        "<form action='/reports' method='POST' class='flex flex-row flex-wrap'>" + 
             "<div class='time-period flex flex-nowrap px-2' style='height: 26px;'>"+
                 "<p class='text-gray-500'>From:</p>" +
                 "<input type='text' name='date_begin' id='date_begin' class='inp'>" +
@@ -65,7 +65,9 @@ public class Reports implements Handler {
         String date_end = context.formParam("date_end");
         //String date_begin = context.formParam("date_begin");
 
-
+       //date_begin = dateFormat(date_begin);
+        //date_end = dateFormat(date_end);
+        
 
         //ISSUE: DATES ARE STORED AS yy/MM/dd in SQL however inputted as dd/MM/yyyy//
 
@@ -73,6 +75,7 @@ public class Reports implements Handler {
 
         //Loop if no dates are entered//
         html = html + "<p><i>Country data from 20/01/2020 until 21/04/2021-option 1(test)</i></p>"; 
+
         if (date_begin == null || date_begin == "") {
 
                 for(int i = 1; i < 191; i++){
@@ -84,12 +87,16 @@ public class Reports implements Handler {
                     }
                     html = html + "</tr>";
                 }
-            }
+        }
 
 
         //Loop if dates are entered//
         else{
+            date_begin = dateFormat(date_begin);
+            html = html + "<p>" + date_begin +"</p>";
             html = html + "<p><i>Country data from" + date_begin + " until " + date_end + " -option 2(test)</i></p>"; 
+                String date_begin2 = dateFormat(date_begin);
+                String date_end2 = dateFormat(date_end);
             for(int i = 1; i < 191; i++){
                 html = html + "<tr data-country='countryName1'>";
                 ArrayList<String> countryData = jdbc.printCountryReportDataWithRange(i, date_begin, date_end);

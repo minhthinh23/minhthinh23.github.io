@@ -21,7 +21,7 @@ public class Infections implements Handler {
 
     @Override
     public void handle(Context context) throws Exception {
-
+        JDBCConnection jdbc = new JDBCConnection();
         String html = "<!DOCTYPE html><html lang='en'><head> <meta charset='UTF-8'> <meta http-equiv='X-UA-Compatible' content='IE=edge'> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <title>Milestone Project</title> <link rel='stylesheet' href='tailwind.min.css'> <link rel='stylesheet' href='main.css'> <link rel='stylesheet' href='jquery-ui.min.css'> <link rel='stylesheet' href='jquery-ui.structure.min.css'> <link rel='stylesheet' href='jquery-ui.theme.min.css'> <link rel='stylesheet' type='text/css' href='datatables.min.css'/></head><body> <div class='cover flex'> <div class='sidebar hidden relative px-2'> <div class='top'> <div class='logo pl-1 pt-4'> <img src='logo.svg' alt='logo'> </div><input type='text' name='search' id='search' class='mx-auto' placeholder='Search Country...'> </div><div class='bottom pt-3'> <a href='/'> <div class='item cursor-pointer w-full px-3 flex flex-row h-10 items-center my-3 rounded-lg'> <div class='icon'> <img src='home.svg' alt='Home'> </div><div class='name-item cursor-pointer text-white px-2'>Home</div></div></a> <a href='/overview'> <div class='item cursor-pointer w-full px-3 flex flex-row h-10 items-center my-3 rounded-lg '> <div class='icon'> <img src='overview.svg' alt='Home'> </div><div class='name-item cursor-pointer text-white px-2'>Overview</div></div></a> <a href='/infections-by-country'> <div class='item cursor-pointer w-full px-3 flex flex-row h-10 items-center my-3 rounded-lg selected'> <div class='icon'> <img src='infections.svg' alt='Home'> </div><div class='name-item cursor-pointer text-white px-2'>Infections by Country</div></div></a> <a href='/deaths'> <div class='item cursor-pointer w-full px-3 flex flex-row h-10 items-center my-3 rounded-lg '> <div class='icon'> <img src='deaths.svg' alt='Home'> </div><div class='name-item cursor-pointer text-white px-2'>Deaths by Country</div></div></a> <a href='/compare-countries'> <div class='item cursor-pointer w-full px-3 flex flex-row h-10 items-center my-3 rounded-lg '> <div class='icon'> <img src='countries.svg' alt='Home'> </div><div class='name-item cursor-pointer text-white px-2'>Compare Countries</div></div></a> <a href='/reports'> <div class='item cursor-pointer w-full px-3 flex flex-row h-10 items-center my-3 rounded-lg '> <div class='icon'> <img src='reports.svg' alt='Home'> </div><div class='name-item cursor-pointer text-white px-2'>Reports</div></div></a> </div><div class='profile-short-menu absolute bottom-0 left-0 flex justify-between px-4 w-full h-16 border-t border-gray-100 items-center shadow-lg'> <div class='profile-pic w-12'> <img src='profile.jpeg' alt='Profile' class='w-full rounded-full'> </div><div class='icons'> <span class='fas fa-cog fa-lg text-white'></span> </div></div></div><div class='container w-full h-full'> <nav class='nav px-4 h-10'> <div class='patch'> <span class='fas fa-bars fa-lg' id='nav_control_icon'></span> <input type='checkbox' id='nav_control' class='cursor-pointer'> </div></nav> <div class='content px-4 pb-2' id='content'> <h2 class='text-2xl font-semibold'>Infections by Country:</h2> <div class='parent flex flex-row flex-wrap'> <div class='left mt-4 border rounded-xl border-gray-300 py-3 px-4'> <div class='head border-b border-gray-300 pb-1'> <div class='heading'> <div class='title'> <h2 class='text-2xl font-semibold'>Cases</h2> </div><div class='info text-gray-400 text-xs'> Information provided by RMIT | Last updated since data given </div></div></div><div class='sorting flex flex-row flex-wrap'>";
 
         // Makesure to re-assign these variables
@@ -92,12 +92,15 @@ public class Infections implements Handler {
         " <div class='data-tables px-3' data-check='side'> <table id='data-table-country' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>States</th> <th id='data-death'>Cases</th> <th id='data-recovery'>Recoveries</th> </tr></thead> <tbody>";
 
         // Table rows | Use Loopto fill in data here
-        html = html + 
-        "<tr data-country='none'>" +
-            "<td>Edinburgh</td>" +
-            "<td>61</td>" +
-            "<td>2011/04/25</td>" +
-        "</tr>";
+
+        html = html + jdbc.outputAustralianStateInfo("Victoria");
+        html = html + jdbc.outputAustralianStateInfo("Queensland");
+        html = html + jdbc.outputAustralianStateInfo("Tasmania");
+        html = html + jdbc.outputAustralianStateInfo("New South Wales");
+        html = html + jdbc.outputAustralianStateInfo("Western Australia");
+        html = html + jdbc.outputAustralianStateInfo("Northern Territory");
+        html = html + jdbc.outputAustralianStateInfo("Australian Capital Territory");
+        html = html + jdbc.outputAustralianStateInfo("South Australia");
 
         // Finish the HTML webpage
         html = html + " </tbody> </table> </div></div></div></div></div></div></div><script defer src='https://use.fontawesome.com/releases/v5.15.3/js/all.js' integrity='sha384-haqrlim99xjfMxRP6EWtafs0sB1WKcMdynwZleuUSwJR0mDeRYbhtY+KPMr+JL6f' crossorigin='anonymous'></script> <script src='https://code.jquery.com/jquery-3.5.1.js'></script> <script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'></script> <script src='jquery-ui.min.js'></script> <script src='https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js'></script> <script src='https://cdn.amcharts.com/lib/4/core.js'></script> <script src='https://cdn.amcharts.com/lib/4/maps.js'></script> <script src='https://cdn.amcharts.com/lib/4/geodata/usaLow.js'></script> <script src='https://cdn.amcharts.com/lib/4/themes/animated.js'></script> <script src='main.js'></script></body></html>";
