@@ -32,7 +32,7 @@
   width: 4rem;
   height: 4rem;
 }
-.cover .sidebar .top input#search {
+.cover .sidebar .top .searchBox input#search {
   margin-top: 2rem;
   width: 95%;
   margin-left: 2.5%;
@@ -45,33 +45,54 @@
   outline: none;
   box-shadow: none;
 }
-.cover .sidebar .top input#search::-moz-placeholder {
+.cover .sidebar .top .searchBox input#search::-moz-placeholder {
   color: #ffffff;
   opacity: 0.8;
 }
-.cover .sidebar .top input#search:-ms-input-placeholder {
+.cover .sidebar .top .searchBox input#search:-ms-input-placeholder {
   color: #ffffff;
   opacity: 0.8;
 }
-.cover .sidebar .top input#search::placeholder {
+.cover .sidebar .top .searchBox input#search::placeholder {
   color: #ffffff;
   opacity: 0.8;
 }
-.cover .sidebar .top input#search:focus {
+.cover .sidebar .top .searchBox input#search:focus {
   background-color: #ffffff;
   border: 1px solid #2F49D0;
 }
-.cover .sidebar .top input#search:focus::-moz-placeholder {
+.cover .sidebar .top .searchBox input#search:focus::-moz-placeholder {
   color: #979797;
   opacity: 1;
 }
-.cover .sidebar .top input#search:focus:-ms-input-placeholder {
+.cover .sidebar .top .searchBox input#search:focus:-ms-input-placeholder {
   color: #979797;
   opacity: 1;
 }
-.cover .sidebar .top input#search:focus::placeholder {
+.cover .sidebar .top .searchBox input#search:focus::placeholder {
   color: #979797;
   opacity: 1;
+}
+.cover .sidebar .top .searchBox .loading {
+  z-index: 10;
+  width: 90%;
+  margin: 2px 5%;
+  display: none;
+  border-radius: 2px 2px 0.5rem 0.5rem;
+  padding: 0.5rem;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+.cover .sidebar .top .searchBox .loading svg {
+  width: 3rem;
+  height: 3rem;
+  margin: 1.5rem auto;
+}
+.cover .sidebar .top .searchBox input#search:focus + .loading {
+  display: block;
 }
 .cover .sidebar .bottom .item:hover {
   background-color: #1A2B82;
@@ -439,4 +460,11 @@ table#data-tables tr td:nth-child(3), table#data-tables tr.even td.sorting_1 td:
     padding: 2rem 0 3rem 0s;
     margin: 1rem 2rem 3rem 2rem;
   }
+}
+
+.content .left-f {
+  width: 35% !important;
+}
+.content .right-f {
+  width: 64% !important;
 }
