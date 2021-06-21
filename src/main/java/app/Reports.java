@@ -49,7 +49,7 @@ public class Reports implements Handler {
             "<input type='submit' value='Go' class='submit'>" +
         "</form>";
 
-        html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Cases</h1> <p class='text-gray-500 text-sm'>30,000</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Deaths</h1> <p class='text-gray-500 text-sm'>30,000</p></div></div></div><div class='data-tables px-3' data-check='modal'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Country</th> <th id='data-death'>Infections</th> <th id='data-recovery'>Deaths</th> <th id='data-fatalityRate'>Average Infection Rate</th> <th id='data-infectionsToDeathPerCapita'>Fatality Rate</th> </tr></thead> <tbody>";
+        html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Global Total Cases</h1> <p class='text-gray-500 text-sm'>3,081,361</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Global Total Deaths</h1> <p class='text-gray-500 text-sm'>144,598,627</p></div></div></div><div class='data-tables px-3' data-check='modal'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Country</th> <th id='data-death'>Infections</th> <th id='data-recovery'>Deaths</th> <th id='data-fatalityRate'>Average Infection Rate</th> <th id='data-infectionsToDeathPerCapita'>Fatality Rate</th> </tr></thead> <tbody>";
 
         // Run loop here to fill the table with all data
       
@@ -60,9 +60,8 @@ public class Reports implements Handler {
 
         //ISSUE: DATES ARE STORED AS yy/MM/dd in SQL however inputted as dd/MM/yyyy//
         //Loop if no dates are entered//
-        html = html + "<p><i>Country data from 20/01/2020 until 21/04/2021-option 1(test)</i></p>"; 
+        html = html + "<h1 class='text-lg font-semibold my-3'>Click on each country row to see more data about country</h1>"; 
         if (entrydate_textbox_unformatted == null || entrydate_textbox_unformatted == "") {
-            html = html + "<p> test 1</p>";
             for(int i = 1; i < 191; i++){
                 html = html + "<tr data-country='"+i+"' onClick='var country = $(this).data(`country`); showData(country)'>";
                 ArrayList<String> countryData = jdbc.printCountryReportData(i);
@@ -79,9 +78,6 @@ public class Reports implements Handler {
         }
         //Loop if dates are entered//
         else{
-            //html = html + "<p>" + date_begin +"</p>";
-            //html = html + "<p><i>Country data from" + date_begin + " until " + date_end + " -option 2(test)</i></p>"; 
-            html = html + "<p> test 2</p>";
             String entrydate_textbox = dateFormat(entrydate_textbox_unformatted);
             String exitdate_textbox = dateFormat(exitdate_textbox_unformatted);
             for(int i = 1; i < 191; i++){
