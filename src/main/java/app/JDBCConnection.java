@@ -1459,7 +1459,7 @@ public class JDBCConnection {
         return data;
     }
 
-    public ArrayList<String> printCountryReportDataWithRange(String j) {
+    public ArrayList<String> Loopu(String j) {
         ArrayList<String> countryData = new ArrayList<String>();
 
         // Setup the variable for the JDBC connection
@@ -1474,20 +1474,21 @@ public class JDBCConnection {
             statement.setQueryTimeout(30);
 
             // The Query
-            String query = "SELECT REGION_NAME, POPULATION, TOTAL_CASES, TOTAL_DEATHS FROM REGION WHERE COUNTRY_NAME = '"
-                    + j + "'";
+            String query = "SELECT REGION_NAME, LATITUDE, LONGITUDE, TOTAL_CASES, TOTAL_DEATHS FROM REGION WHERE COUNTRY_NAME = '"+ j + "'";
             ResultSet results = statement.executeQuery(query);
 
             // Process all of the results
             while (results.next()) {
 
                 String REGION_NAME = results.getString("REGION_NAME");
-                String POPULATION = results.getString("POPULATION");
+                String LATITUDE = results.getString("LATITUDE");
+                String LONGITUDE = results.getString("LONGITUDE");
                 String TOTAL_CASES = results.getString("TOTAL_CASES");
                 String TOTAL_DEATHS = results.getString("TOTAL_DEATHS");
 
                 countryData.add(REGION_NAME);
-                countryData.add(POPULATION);
+                countryData.add(LATITUDE);
+                countryData.add(LONGITUDE);
                 countryData.add(TOTAL_CASES);
                 countryData.add(TOTAL_DEATHS);
             }

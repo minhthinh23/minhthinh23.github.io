@@ -50,8 +50,24 @@ $(document).ready(function () {
       $(this).next().next().focus();
     }
   });
-
+  
   $("[name='date_end']").datepicker({
+    dateFormat: "dd/mm/yy",
+    // autoSize: true,
+    hideIfNoPrevNext: true,
+    minDate: new Date(2020, 1 - 1, 21),
+    maxDate: new Date(2021, 4 - 1, 21),
+    navigationAsDateFormat: true
+  });
+  $("[name='date_begin2']").datepicker({
+    dateFormat: "dd/mm/yy",
+    // autoSize: true,
+    hideIfNoPrevNext: true,
+    minDate: new Date(2020, 1 - 1, 21),
+    maxDate: new Date(2021, 4 - 1, 21),
+    navigationAsDateFormat: true
+  });
+  $("[name='date_end2']").datepicker({
     dateFormat: "dd/mm/yy",
     // autoSize: true,
     hideIfNoPrevNext: true,
@@ -64,6 +80,17 @@ $(document).ready(function () {
     "paging": true,
     "ordering": true,
     "info": true
+  });
+
+  var table3 = $('#data-tablesi').DataTable({
+    paging: true,
+    ordering: true,
+    info: true,
+    rowReorder: true,
+    columnDefs: [
+        { orderable: false, targets: '_all' }
+    ]
+    
   });
 
   
@@ -114,3 +141,33 @@ $("#search").keyup(function () {
   $("#searchResults").html("<svg version='1.1' id='L1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 100 100' enable-background='new 0 0 100 100' xml:space='preserve'> <circle fill='none' stroke='#2f49d0' stroke-width='6' stroke-miterlimit='15' stroke-dasharray='14.2472,14.2472' cx='50' cy='50' r='47' > <animateTransform attributeName='transform' attributeType='XML' type='rotate' dur='5s' from='0 50 50' to='360 50 50' repeatCount='indefinite'/> </circle> <circle fill='none' stroke='#2f49d0' stroke-width='1' stroke-miterlimit='10' stroke-dasharray='10,10' cx='50' cy='50' r='39'> <animateTransform attributeName='transform' attributeType='XML' type='rotate' dur='5s' from='0 50 50' to='-360 50 50' repeatCount='indefinite'/> </circle> <g fill='#2f49d0'> <rect x='30' y='35' width='5' height='30'> <animateTransform attributeName='transform' dur='1s' type='translate' values='0 5 ; 0 -5; 0 5' repeatCount='indefinite' begin='0.1'/> </rect> <rect x='40' y='35' width='5' height='30' > <animateTransform attributeName='transform' dur='1s' type='translate' values='0 5 ; 0 -5; 0 5' repeatCount='indefinite' begin='0.2'/> </rect> <rect x='50' y='35' width='5' height='30' > <animateTransform attributeName='transform' dur='1s' type='translate' values='0 5 ; 0 -5; 0 5' repeatCount='indefinite' begin='0.3'/> </rect> <rect x='60' y='35' width='5' height='30' > <animateTransform attributeName='transform' dur='1s' type='translate' values='0 5 ; 0 -5; 0 5' repeatCount='indefinite' begin='0.4'/> </rect> <rect x='70' y='35' width='5' height='30' > <animateTransform attributeName='transform' dur='1s' type='translate' values='0 5 ; 0 -5; 0 5' repeatCount='indefinite' begin='0.5'/> </rect> </g> </svg>");
 }
 });
+
+$("#country_name").change(function () { 
+  ty();
+});
+
+
+function ty(){
+  $.ajax({
+    type: "GET",
+    url: "ajax/region/" + $("#country_name").val(),
+    data: {},
+    dataType: "json",
+    success: function (data) {
+      console.log(data.length);
+      var press='';
+      for(var i = 0; i < data.length; i+=5){
+        press = press +`
+        <tr data-country='`+i+1+`'>
+        <td>`+data[i]+`</td>
+        <td>`+data[i+1]+`</td>
+        <td>`+data[i+2]+`</td>
+        <td>`+data[i+3]+`</td>
+        <td>`+data[i+4]+`</td>
+        </tr>`;
+      }
+
+      $("#table-uuii").html(press);
+    }
+  });  
+}
