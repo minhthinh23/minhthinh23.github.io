@@ -34,10 +34,8 @@ public class Deaths implements Handler {
 
 
         // Assign these variables with details as named | All these are used in text below and will give error if not assigned
-        int confirmedDeaths = 0;
-        int globalPerCapitaDeath = 0;
-        int totalCases = 0;
-        int totalDeaths = 0;
+        String confirmedDeaths = "3,081,361";
+        String globalPerCapitaDeath = "3.4%";
 
         html = html + 
         "<form action='/deaths' method='POST' class='flex flex-row flex-wrap'>" +
@@ -53,7 +51,7 @@ public class Deaths implements Handler {
         "</form>";
 
         html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Confirm Deaths</h1> <p class='text-gray-500 text-sm'>" + confirmedDeaths + 
-        "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Global per capita</h1> <p class='text-gray-500 text-sm'>" + globalPerCapitaDeath + 
+        "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Global Mortality Rate</h1> <p class='text-gray-500 text-sm'>" + globalPerCapitaDeath + 
         "</p></div></div><div class='data-tables px-3' data-check='side'> <table id='data-tables' class='display' style='width:100%'> <thead> <tr data-country='none'> <th id='data-name'>Country</th> <th id='data-death'>Population</th> <th id='data-recovery'>Deaths</th> <th>Average Deaths per Day</th><th>Most Fatalities in a Day</th> </tr></thead> <tbody>";
         
         
@@ -107,7 +105,7 @@ public class Deaths implements Handler {
             "</div>" +
             "<input type='submit' value='Go' class='submit'>" +
         "</form>";
-        html = html + " </div><div class='case-death-info flex flex-row flex-wrap my-3'> <div class='cases px-4 border-r border-gray-200'> <h1 class='text-xl font-semibold'>Total Cases</h1> <p class='text-gray-500 text-sm'>" + totalCases + "</p></div><div class='deaths px-4'> <h1 class='text-xl font-semibold'>Total Deaths</h1> <p class='text-gray-500 text-sm'>" + totalDeaths + "</p></div></div><div class='data-tables px-3' data-check='side'> <div class='sides'> <h1 class='text-xl mb-4 font-semibold'>Figures</h1>"; 
+        html = html + " </div><div class='data-tables px-3' data-check='side'> <div class='sides'>"; 
        
        
         String Countryname_drop = context.formParam("country2");
@@ -125,7 +123,7 @@ public class Deaths implements Handler {
             if(Countryname_drop == null || Countryname_drop == ""){
 
                 ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsData("Afghanistan");
-                html = html + "<h2>Displaying results for Afghanistan from   22/01/2020 until 22/04/2021</h2>";
+                html = html + "<h1 class='text-xl mb-2 font-semibold' id='cty'>Afghanistan</h1><h2 class='mb-4'>22/01/2020 until 22/04/2021</h2>";
                 for (int i = 0; i < 4; i++){
                     html = html + "<div class='col flex py-3 px-2 border-t border-gray-400 justify-between'>";
                     html = html + "<h1>" + CloserLookDeathHeaders.get(i) + "</h1>";
@@ -135,9 +133,8 @@ public class Deaths implements Handler {
             }
             //country inputted//
             else{
-                html = html + "<h2>" + Countryname_drop+ "</h2>";
                 ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsData(Countryname_drop);
-                html = html + "<h2>Displaying results for " + Countryname_drop + " from 22/01/2020 until 22/04/2021</h2>";
+                html = html + "<h1 class='text-xl mb-2 font-semibold' id='cty'>" + Countryname_drop + "</h1><h2 class='mb-4'>22/01/2020 until 22/04/2021</h2>";
                 for (int i = 0; i < 4; i++){
                     html = html + "<div class='col flex py-3 px-2 border-t border-gray-400 justify-between'>";
                     html = html + "<h1>" + CloserLookDeathHeaders.get(i) + "</h1>";
@@ -151,7 +148,7 @@ public class Deaths implements Handler {
                 String entrydate_textbox2 = dateFormat(entrydate_textbox_unformatted2);
                 String exitdate_textbox2 = dateFormat(exitdate_textbox_unformatted2);
      
-            html = html + "<h2>Displaying results for Afghanistan from " + dateFormat(entrydate_textbox2) + " until " + dateFormat(exitdate_textbox2) + "</h2>";
+            html = html + "<h1 class='text-xl mb-2 font-semibold' id='cty'>" + "Afghanistan" + "</h1><h2 class='mb-4'>" + dateFormat(entrydate_textbox2) + " until " + dateFormat(exitdate_textbox2) + "</h2>";
             ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsDataWithRange("Afghanistan", entrydate_textbox2, exitdate_textbox2);
                 for (int i = 0; i < 4; i++){
                     html = html + "<div class='col flex py-3 px-2 border-t border-gray-400 justify-between'>";
@@ -164,7 +161,7 @@ public class Deaths implements Handler {
 
                 String entrydate_textbox2 = dateFormat(entrydate_textbox_unformatted2);
                 String exitdate_textbox2 = dateFormat(exitdate_textbox_unformatted2);
-                html = html + "<h2>Displaying results for " + Countryname_drop + " from " + dateFormat(entrydate_textbox2) + " until " + dateFormat(exitdate_textbox2) + "</h2>";
+                html = html + "<h1 class='text-xl mb-2 font-semibold' id='cty'>" + Countryname_drop + "</h1><h2 class='mb-4'>" + dateFormat(entrydate_textbox2) + " until " + dateFormat(exitdate_textbox2) + "</h2>";
                 ArrayList<String> CloserLookDeathData= jdbc.printCloserLookDeathsDataWithRange(Countryname_drop, entrydate_textbox2, exitdate_textbox2);  
                 for (int i = 0; i < 4; i++){
                     html = html + "<div class='col flex py-3 px-2 border-t border-gray-400 justify-between'>";
@@ -179,7 +176,7 @@ public class Deaths implements Handler {
 
 
 
-        html = html + " </div></div></div></div></div></div></div></div><script defer src='https://use.fontawesome.com/releases/v5.15.3/js/all.js' integrity='sha384-haqrlim99xjfMxRP6EWtafs0sB1WKcMdynwZleuUSwJR0mDeRYbhtY+KPMr+JL6f' crossorigin='anonymous'></script> <script src='https://code.jquery.com/jquery-3.5.1.js'></script> <script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'></script> <script src='jquery-ui.min.js'></script> <script src='https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js'></script> <script src='https://cdn.amcharts.com/lib/4/core.js'></script> <script src='https://cdn.amcharts.com/lib/4/maps.js'></script> <script src='https://cdn.amcharts.com/lib/4/geodata/usaLow.js'></script> <script src='https://cdn.amcharts.com/lib/4/themes/animated.js'></script><script src='main.js'></script></body></html>";
+        html = html + " </div></div></div></div></div></div></div></div><script defer src='https://use.fontawesome.com/releases/v5.15.3/js/all.js' integrity='sha384-haqrlim99xjfMxRP6EWtafs0sB1WKcMdynwZleuUSwJR0mDeRYbhtY+KPMr+JL6f' crossorigin='anonymous'></script> <script src='https://code.jquery.com/jquery-3.5.1.js'></script> <script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'></script> <script src='jquery-ui.min.js'></script> <script src='https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js'></script> <script src='https://cdn.amcharts.com/lib/4/core.js'></script> <script src='https://cdn.amcharts.com/lib/4/maps.js'></script> <script src='https://cdn.amcharts.com/lib/4/geodata/usaLow.js'></script> <script src='https://cdn.amcharts.com/lib/4/themes/animated.js'></script><script src='main.js'></script><script defer>var hm = $('#country2').html(); $('#country2').html('<option>'+$(`#cty`).html()+'</option>'+hm);</script></body></html>";
 
         // DO NOT MODIFY THIS
         // Makes Javalin render the webpage

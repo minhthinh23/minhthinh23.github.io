@@ -60,11 +60,8 @@ public class AJAX implements Handler {
             }
             context.json(pass);
         }else if(context.pathParam("key").equals("region")){
-            ArrayList<String> names = jdbc.getCountryList();
-            context.json(names);
+            ArrayList<String> data = jdbc.Loopu(context.pathParam("data"));
+            context.json(data);
         }
     }
-
-
-
 }
